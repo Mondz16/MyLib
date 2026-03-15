@@ -1,6 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import API from "../services/api.ts";
 import BookCard from "../components/BookCard";
+import {useFavorite} from "../hooks/useFavorite.ts";
+import { useAuth } from "../context/AuthContext.tsx";
+import { useNavigate } from "react-router-dom";
 
 interface Book {
   key: string;
@@ -17,6 +20,9 @@ export default function SearchPage() {
   const [error, setError] = useState("");
   const [totalResults, setTotalResults] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
+  const {favoriteKeys, toggleFavorite } = useFavorite();
+  const {isAuthenticated} = useAuth();
+  const navigate = useNavigate();
 
   const searchBooks = useCallback(async (searchQuery: string) => {
     if (!searchQuery.trim()) {
@@ -41,6 +47,15 @@ export default function SearchPage() {
       setLoading(false);
     }
   }, []);
+
+  const handleFavoriteAttempt = (book : Book) => {
+    if(!isAuthenticated){
+      navigate('/login');
+      return;
+    }
+
+    toggleFavorite(book);
+  }
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -100,7 +115,7 @@ export default function SearchPage() {
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {books.map((book) => (
-              <BookCard key={book.key} book={book} />
+              <BookCard key={book.key} book={book} isFavorited={favoriteKeys.has(book.key)} onToggleFavorite={handleFavoriteAttempt} />
             ))}
           </div>
         </>

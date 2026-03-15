@@ -1,0 +1,46 @@
+# ===========================
+# .NET / ASP.NET Core
+# ===========================
+**/bin/
+**/obj/
+*.user
+*.suo
+.vs/
+
+# SQLite database (runtime file, not source)
+*.db
+*.db-shm
+*.db-wal
+
+# .NET secrets
+**/appsettings.Development.json
+
+# ===========================
+# React / Node
+# ===========================
+**/node_modules/
+**/dist/
+**/build/
+
+# Vite cache
+**/.vite/
+
+# ===========================
+# Environment & Secrets
+# ===========================
+.env
+.env.local
+.env.*.local
+
+# ===========================
+# Editor & OS
+# ===========================
+.vscode/
+.cursor/
+.DS_Store
+Thumbs.db
+
+# ===========================
+# Misc
+# ===========================
+settings.json

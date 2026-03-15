@@ -158,3 +158,4 @@
 /Users/macprom2/Documents/WebProjects- (.Net)/Library/MyLib.Api/obj/Debug/net10.0/MyLib.Api.pdb
 /Users/macprom2/Documents/WebProjects- (.Net)/Library/MyLib.Api/obj/Debug/net10.0/MyLib.Api.genruntimeconfig.cache
 /Users/macprom2/Documents/WebProjects- (.Net)/Library/MyLib.Api/obj/Debug/net10.0/ref/MyLib.Api.dll
+/Users/macprom2/Documents/WebProjects- (.Net)/Library/MyLib.Api/obj/Debug/net10.0/MyLib.Api.sourcelink.json

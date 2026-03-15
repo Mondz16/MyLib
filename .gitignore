@@ -44,3 +44,7 @@ Thumbs.db
 # Misc
 # ===========================
 settings.json
+
+# Documentation (local reference only)
+docs/
+*.md

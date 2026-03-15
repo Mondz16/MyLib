@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute.tsx";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import Navbar from "./components/Navbar";
+import SearchPage from "./pages/SearchPage.tsx";
 
 function App() {
   return (
@@ -16,14 +17,7 @@ function App() {
             <Routes>
               <Route path="/login" element={<LoginPage />} />
               <Route path="/register" element={<RegisterPage />} />
-              <Route
-                path="/"
-                element={
-                  <div className="text-center text-gray-500 py-12">
-                    Search page — coming in Phase 3
-                  </div>
-                }
-              />
+              <Route path="/" element={<SearchPage />} />
               <Route
                 path="/favorites"
                 element={

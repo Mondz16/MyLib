@@ -90,4 +90,26 @@ public class OpenLibraryService
             Books = books
         };
     }
+    
+    public async Task<object?> GetBookDetailsAsync(string olid)
+    {
+        var response = await _httpClient.GetAsync($"works/{olid}.json");
+        if(!response.IsSuccessStatusCode) return null;
+
+        var json = await response.Content.ReadAsStringAsync();
+        var data = JsonDocument.Parse(json);
+        var root = data.RootElement;
+
+        var description = "";
+        if (root.TryGetProperty("description", out var descProp))
+        {
+            if (descProp.ValueKind == JsonValueKind.String)
+                description = descProp.GetString() ?? "";
+            else if (descProp.ValueKind == JsonValueKind.Object &&
+                    descProp.TryGetProperty("value", out var valueProp))
+                description = valueProp.GetString() ?? "";
+        }
+
+        return new {description};
+    }
 }

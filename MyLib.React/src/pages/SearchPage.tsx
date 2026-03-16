@@ -4,6 +4,7 @@ import BookCard from "../components/BookCard";
 import {useFavorite} from "../hooks/useFavorite.ts";
 import { useAuth } from "../context/AuthContext.tsx";
 import { useNavigate } from "react-router-dom";
+import BookModal from "../components/BookModal.tsx";
 
 interface Book {
   key: string;
@@ -21,10 +22,13 @@ export default function SearchPage() {
   const [totalResults, setTotalResults] = useState(0);
   const [hasSearched, setHasSearched] = useState(false);
   const {favoriteKeys, toggleFavorite } = useFavorite();
+  const [page,setPage] = useState(1);
+  const [hasMore, setHasMore] = useState(false);
+  const [selectedBook, setSelectedBook] = useState<Book | null>(null);
   const {isAuthenticated} = useAuth();
   const navigate = useNavigate();
 
-  const searchBooks = useCallback(async (searchQuery: string) => {
+  const searchBooks = useCallback(async (searchQuery: string, pageNum: number) => {
     if (!searchQuery.trim()) {
       setBooks([]);
       setHasSearched(false);
@@ -36,9 +40,15 @@ export default function SearchPage() {
     setHasSearched(true);
     try {
       const response = await API.get("/books/search", {
-        params: { q: searchQuery },
+        params: { q: searchQuery, page: pageNum},
       });
-      setBooks(response.data.books);
+      if(page == 1){
+        setBooks(response.data.books);
+      }
+      else {
+        setBooks((prev) => [...prev, response.data.books]);
+      }
+      setHasMore(response.data.books.length === 20);
       setTotalResults(response.data.totalResult);
       console.log(books);
     } catch (error) {
@@ -59,7 +69,8 @@ export default function SearchPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      searchBooks(query);
+      setPage(1);
+      searchBooks(query, page);
     }, 500);
 
     return () => clearTimeout(timer);
@@ -115,10 +126,24 @@ export default function SearchPage() {
           </p>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {books.map((book) => (
-              <BookCard key={book.key} book={book} isFavorited={favoriteKeys.has(book.key)} onToggleFavorite={handleFavoriteAttempt} />
+              <BookCard key={book.key} book={book} isFavorited={favoriteKeys.has(book.key)} onClick={() => setSelectedBook(book)} onToggleFavorite={handleFavoriteAttempt} />
             ))}
           </div>
         </>
+      )}
+
+      {selectedBook && (
+            <BookModal book={selectedBook} onClose={() => setSelectedBook(null)} />
+      )}
+
+      {hasMore && !loading && (
+        <div className="text-center mt-8">
+          <button
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700"
+          >
+            Load More
+          </button>
+        </div>
       )}
     </div>
   );

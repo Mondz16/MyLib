@@ -24,4 +24,12 @@ public class BooksController : ControllerBase
         var results = await _openLibraryService.SearchBookAsync(q, page, Math.Min(limit, 50));
         return Ok(results);
     }
+
+    [HttpGet("{olid}")]
+    public async Task<IActionResult> GetBook(string olid)
+    {
+        var result = await _openLibraryService.GetBookDetailsAsync(olid);
+        if(result == null) return NotFound();
+        return Ok(result);
+    }
 }
